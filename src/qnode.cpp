@@ -98,10 +98,11 @@ void QNode::openhabCallback(const diagnostic_msgs::KeyValue& msg) {
 	log(Info, std::string("receive a message!") + msg.key + msg.value);
 	if(msg.key == "door" && msg.value == "ON") {
 		log(Info, std::string("test ok!"));
-		robotCome();
+		Q_EMIT QNode::openhabUpdated();
+		//robotCome();
 	}	
 	//ros::spinOnce();
-	Q_EMIT QNode::openhabUpdated();
+
 }
 
 void QNode::sendCommand(const std::string &message)
