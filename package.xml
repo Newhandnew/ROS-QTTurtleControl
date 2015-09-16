@@ -20,6 +20,10 @@
   <run_depend>qt_build</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>libqt4-dev</run_depend>
-
+<!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+    <rqt_gui plugin="${prefix}/plugin.xml"/>
+  </export>
  
 </package>

@@ -44,6 +44,9 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 	ui.view_logging->setModel(qnode.loggingModel());
     QObject::connect(&qnode, SIGNAL(loggingUpdated()), this, SLOT(updateLoggingView()));
 
+    // ------------ openhab update --------------
+    QObject::connect(&qnode, SIGNAL(openhabUpdated()), this, SLOT(on_button_up_clicked()));
+    
     /*********************
     ** Auto Start
     **********************/
@@ -70,20 +73,28 @@ void MainWindow::showNoMasterMessage() {
  * is already checked or not.
  */
 
-void MainWindow::on_button_up_clicked(bool check ) {
-    qnode.sendVel(0.5,0);
+void MainWindow::on_button_up_clicked() {
+    // qnode.sendVel(0.5,0);
+    qnode.robotCome();
 }
 
-void MainWindow::on_button_down_clicked(bool check ) {
-    qnode.sendVel(-0.5,0);
+void MainWindow::on_button_down_pressed() {
+    // qnode.sendVel(-0.5,0);
+    qnode.sendCommand("b");
 }
 
-void MainWindow::on_button_left_clicked(bool check ) {
-    qnode.sendVel(0,0.3);
+void MainWindow::on_button_left_pressed() {
+    // qnode.sendVel(0,0.3);
+    qnode.sendCommand("c");
 }
 
-void MainWindow::on_button_right_clicked(bool check ) {
-    qnode.sendVel(0,-0.3);
+void MainWindow::on_button_right_pressed() {
+    // qnode.sendVel(0,-0.3);
+    qnode.sendCommand("d");
+}
+
+void MainWindow::on_button_stop_clicked() {
+    qnode.sendCommand("e");
 }
 
 void MainWindow::on_button_connect_clicked(bool check ) {
@@ -96,6 +107,7 @@ void MainWindow::on_button_connect_clicked(bool check ) {
             ui.button_down->setEnabled(true);
             ui.button_left->setEnabled(true);
             ui.button_right->setEnabled(true);
+            ui.button_stop->setEnabled(true);
 		}
 	} else {
 		if ( ! qnode.init(ui.line_edit_master->text().toStdString(),

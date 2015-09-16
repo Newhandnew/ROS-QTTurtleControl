@@ -48,6 +48,24 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
+         <widget class="QLabel" name="label_4">
+          <property name="font">
+           <font>
+            <pointsize>16</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+            <underline>true</underline>
+           </font>
+          </property>
+          <property name="text">
+           <string>ERBG Demo</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_12">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -59,7 +77,7 @@
            <string>Logging</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
+           <item row="1" column="0">
             <widget class="QListView" name="view_logging"/>
            </item>
           </layout>
@@ -77,7 +95,7 @@
      <x>0</x>
      <y>0</y>
      <width>944</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -298,6 +316,9 @@
            <property name="text">
             <string>Up</string>
            </property>
+           <property name="autoRepeat">
+            <bool>true</bool>
+           </property>
           </widget>
           <widget class="QPushButton" name="button_left">
            <property name="enabled">
@@ -328,6 +349,9 @@
            </property>
            <property name="text">
             <string>Left</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>true</bool>
            </property>
           </widget>
           <widget class="QPushButton" name="button_right">
@@ -360,6 +384,9 @@
            <property name="text">
             <string>Right</string>
            </property>
+           <property name="autoRepeat">
+            <bool>true</bool>
+           </property>
           </widget>
           <widget class="QPushButton" name="button_down">
            <property name="enabled">
@@ -390,6 +417,43 @@
            </property>
            <property name="text">
             <string>Down</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="button_stop">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>90</y>
+             <width>85</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="toolTip">
+            <string>Set the target to the current joint trajectory state.</string>
+           </property>
+           <property name="statusTip">
+            <string>Clear all waypoints and set the target to the current joint trajectory state.</string>
+           </property>
+           <property name="text">
+            <string>Stop</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>false</bool>
            </property>
           </widget>
          </widget>

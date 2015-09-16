@@ -16,6 +16,7 @@
 #include <std_msgs/String.h>
 #include <sstream>
 #include <geometry_msgs/Twist.h>
+#include <diagnostic_msgs/KeyValue.h>
 #include "../include/qtest/qnode.hpp"
 
 /*****************************************************************************
@@ -49,8 +50,10 @@ bool QNode::init() {
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle n;
 	// Add your ros communications here.
-    chatter_publisher = n.advertise<geometry_msgs::Twist>("/cmd_vel_mux/input/teleop", 1);
-    //start();
+    command_publisher = n.advertise<std_msgs::String>("/test", 10);
+    chatter_publisher = n.advertise<std_msgs::String>("chatter", 1000);\
+    openhab_subscriber = n.subscribe("openhab_updates", 10, &QNode::openhabCallback, this);
+    start();
 	return true;
 }
 
@@ -65,7 +68,9 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle n;
 	// Add your ros communications here.
+	command_publisher = n.advertise<std_msgs::String>("/test", 10);
 	chatter_publisher = n.advertise<std_msgs::String>("chatter", 1000);
+	openhab_subscriber = n.subscribe("openhab_updates", 10, &QNode::openhabCallback, this);
 	start();
 	return true;
 }
@@ -73,27 +78,55 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
 void QNode::run() {
 	ros::Rate loop_rate(1);
 	int count = 0;
-    if ( ros::ok() ) {
+    while ( ros::ok() ) {
 
-		std_msgs::String msg;
-		std::stringstream ss;
-		ss << "hello world " << count;
-		msg.data = ss.str();
-		chatter_publisher.publish(msg);
-		log(Info,std::string("I sent: ")+msg.data);
+		//std_msgs::String msg;
+		//std::stringstream ss;
+		//ss << "hello world " << count;
+		//msg.data = ss.str();
+		//chatter_publisher.publish(msg);
+		//log(Info,std::string("I sent: ")+msg.data);
 		ros::spinOnce();
 		loop_rate.sleep();
 		++count;
 	}
-    //std::cout << "Ros shutdown, proceeding to close the gui." << std::endl;
-    //Q_EMIT rosShutdown(); // used to signal the gui for a shutdown (useful to roslaunch)
+    std::cout << "Ros shutdown, proceeding to close the gui." << std::endl;
+    Q_EMIT rosShutdown(); // used to signal the gui for a shutdown (useful to roslaunch)
+}
+
+void QNode::openhabCallback(const diagnostic_msgs::KeyValue& msg) {
+	log(Info, std::string("receive a message!") + msg.key + msg.value);
+	if(msg.key == "door" && msg.value == "ON") {
+		log(Info, std::string("test ok!"));
+		robotCome();
+	}	
+	//ros::spinOnce();
+	Q_EMIT QNode::openhabUpdated();
+}
+
+void QNode::sendCommand(const std::string &message)
+{
+	std_msgs::String msg;
+	//std::stringstream ss;
+	// std::string test;
+	// test = message;
+	//msg <<message;
+	msg.data = message;//ss.str();
+	command_publisher.publish(msg);
 }
 
 void QNode::sendVel(double linear, double angular) {
     geometry_msgs::Twist twist;
     twist.angular.z = angular;
     twist.linear.x = linear;
-    chatter_publisher.publish(twist);
+    command_publisher.publish(twist);
+}
+
+void QNode::robotCome(void) {
+	sendCommand("a");
+	wait(4000);
+	//sleep(1000);
+	sendCommand("e");
 }
 
 void QNode::log( const LogLevel &level, const std::string &msg) {

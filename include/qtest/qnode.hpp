@@ -20,6 +20,7 @@
 #include <string>
 #include <QThread>
 #include <QStringListModel>
+#include <diagnostic_msgs/KeyValue.h>
 
 
 /*****************************************************************************
@@ -41,7 +42,8 @@ public:
 	bool init(const std::string &master_url, const std::string &host_url);
 	void run();
 	void sendVel(double angular, double linear);
-
+	void sendCommand(const std::string &message);
+    void robotCome(void);
 	/*********************
 	** Logging
 	**********************/
@@ -60,11 +62,18 @@ Q_SIGNALS:
 	void loggingUpdated();
     void rosShutdown();
 
+    void openhabUpdated();
+
 private:
 	int init_argc;
 	char** init_argv;
 	ros::Publisher chatter_publisher;
+	ros::Publisher command_publisher;
+	ros::Subscriber openhab_subscriber;
     QStringListModel logging_model;
+
+    void openhabCallback(const diagnostic_msgs::KeyValue& msg);
+
 };
 
 }  // namespace qtest
