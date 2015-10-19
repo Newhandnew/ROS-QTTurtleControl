@@ -46,7 +46,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     QObject::connect(&qnode, SIGNAL(loggingUpdated()), this, SLOT(updateLoggingView()));
 
     // ------------ openhab update --------------
-    QObject::connect(&qnode, SIGNAL(openhabUpdated()), this, SLOT(on_button_up_clicked()));
+    //QObject::connect(&qnode, SIGNAL(openhabUpdated()), this, SLOT(on_button_up_clicked()));
     
     /*********************
     ** Auto Start
@@ -54,6 +54,8 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     if ( ui.checkbox_remember_settings->isChecked() ) {
         on_button_connect_clicked(true);
     }
+
+    on_button_connect_clicked(true);        // for auto-connection
 }
 
 MainWindow::~MainWindow() {}
@@ -76,7 +78,8 @@ void MainWindow::showNoMasterMessage() {
 
 void MainWindow::on_button_up_clicked() {
     // qnode.sendVel(0.5,0);
-    qnode.robotCome();
+    qnode.sendCommand("a");
+    //qnode.robotCome();
 }
 
 void MainWindow::on_button_down_pressed() {

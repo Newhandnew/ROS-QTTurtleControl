@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find iot_bridge)/launch/iot.launch" />
+
+  <node pkg="qtest" type="qtest" name="qtest" respawn="false" />
+
+</launch>
+

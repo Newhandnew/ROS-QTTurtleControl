@@ -95,10 +95,39 @@ void QNode::run() {
 }
 
 void QNode::openhabCallback(const diagnostic_msgs::KeyValue& msg) {
-	log(Info, std::string("receive a message!") + msg.key + msg.value);
-	if(msg.key == "door" && msg.value == "ON") {
-		log(Info, std::string("test ok!"));
-		Q_EMIT QNode::openhabUpdated();
+	log(Warn, std::string("receive a message!") + msg.key + msg.value);
+	if(msg.key == "Robot_Command") {
+		if(msg.value == "1") {
+			sendCommand("a");
+		}
+		else if(msg.value == "2") {
+			sendCommand("b");
+		}
+		else if(msg.value == "3") {
+			sendCommand("c");
+		}
+		else if(msg.value == "4") {
+			sendCommand("d");
+		}
+		else if(msg.value == "5") {
+			sendCommand("e");
+		}
+		else {
+			log(Info, std::string("get others"));
+		}
+		// switch(msg.value) {
+		// 	case '1':
+		// 		log(Info, std::string("get 1"));
+		// 		break;
+		// 	case '2':
+		// 		log(Info, std::string("get 2"));
+		// 		break;
+		// 	default:
+		// 		log(Info, std::string("get others"));
+		// 		break;
+
+		// }
+		//Q_EMIT QNode::openhabUpdated();     //remove for internal trigger
 		//robotCome();
 	}	
 	//ros::spinOnce();
